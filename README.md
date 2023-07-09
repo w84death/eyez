@@ -1,7 +1,7 @@
 # EYEZ
 Simple python application to recognize objects via camera. Done as an vision module for [AI project llama-assistant](https://github.com/w84death/llama-assistant).
 
-![[Eyez demo](eyez.jpg)
+![Eyez demo](eyez.jpg)
 
 ## Quick Start
 ```
