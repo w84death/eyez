@@ -10,8 +10,8 @@ from collections import OrderedDict
 class Eyez:
     def __init__(self, frame_rate=4, timeout=3):
         self.video = cv2.VideoCapture(0)
-        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        self.video.set(cv2.CAP_PROP_FRAME_WIDTH, 1024)
+        self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, 768)
         self.labels = {}
         self.spoken_labels = {}
         self.audio_queue = Queue()
@@ -33,6 +33,7 @@ class Eyez:
 
     def start(self):
         speak_thread_obj = self.speak_thread()
+        self.audio_queue.put("Welcome to the EYEZ.")
         while True:
             ret, frame = self.video.read()
             self.frame_count += 1
@@ -57,9 +58,12 @@ class Eyez:
                             self.audio_queue.put(item)
 
                     labels_sorted = OrderedDict(sorted(self.labels.items(), key=lambda t: t[1]))
-                    text = ' '.join(labels_sorted.keys())
-                    cv2.putText(output_image, text, (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+                    text = ', '.join(labels_sorted.keys())
 
+                    if text != '':
+                        cv2.putText(output_image, "I see a " + text + ".", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+                    else:
+                         cv2.putText(output_image, "I see a nothing...", (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
                     cv2.imshow("EYEZ", output_image)
 
             if cv2.waitKey(1) & 0xFF == ord("q"):
